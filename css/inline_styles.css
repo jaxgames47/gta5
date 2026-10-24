@@ -1,0 +1,36 @@
+
+	html, body { margin: 0; height: 100%; background: #000; color: #ccc; font: 12px monospace; overflow: hidden; }
+	#canvas { display: block; position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background: #000; }
+	/* title screen: the game's loading screen (LOADINGSCREEN_STARTUP) on its 1280x720 stage, scaled to the window; see the script below */
+	@font-face { font-family: 'Chalet'; src: url('/b/8b0b5899ed/title/chalet.woff') format('woff'); }
+	#loading { position: fixed; inset: 0; background: #000; overflow: hidden; transition: opacity .8s; z-index: 5; }
+	#loading.done { opacity: 0; pointer-events: none; }
+	#ls-stage { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0; overflow: hidden; font: 12px Chalet, sans-serif; color: #fff; }
+	#ls-screens { position: absolute; inset: 0; }
+	.ls-screen { position: absolute; inset: 0; }
+	/* one camera per layer, so layers composite in display-list order like Scaleform (no depth test): 640 / tan(55 deg / 2) = 1229, Scaleform's default 3D camera
+	   at the stage centre (moved against the screen's slide, see the script) */
+	.ls-cam { position: absolute; inset: 0; perspective: 1229px; perspective-origin: 640px 360px; }
+	.ls-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; background-size: 100% 100%; }
+	#ls-logo { position: absolute; left: 95px; top: 492.5px; width: 186px; height: 186px; }
+	#ls-bars { position: absolute; right: 96px; top: 642px; display: flex; gap: 3px; }
+	.ls-bar { height: 24px; padding: 0 6px; display: flex; align-items: center; background: rgba(0, 0, 0, .706); border-radius: 2.4px; white-space: nowrap; }
+	#modes { gap: 8px; }
+	#modes button { display: flex; align-items: center; height: 24px; padding: 0; border: 0; background: none; color: #fff; font: 12px Chalet, sans-serif; cursor: pointer; }
+	#modes button:disabled { cursor: default; }
+	#modes button[hidden] { display: none; }
+	#modes.ask button:not(:disabled) .ls-key { animation: ls-ask 1.2s ease-in-out infinite; }
+	@keyframes ls-ask { 50% { opacity: .35; } }
+	.ls-key { margin-left: 4px; min-width: 12px; height: 15px; padding: 0 4px; line-height: 16px; border-radius: 2px; background: #fff; color: #000; font-size: 10px; text-transform: uppercase; }
+	.ls-spin { flex: none; width: 22px; height: 22px; margin-left: 2px; background: url('/b/8b0b5899ed/title/spinner.png') center / 24px 24px no-repeat; animation: ls-spin 2s steps(60) infinite; }
+	@keyframes ls-spin { from { transform: rotate(0deg) scaleX(-1); } to { transform: rotate(-360deg) scaleX(-1); } }
+	#label { text-shadow: .85px .85px 1px rgba(0, 0, 0, .45); }
+	#pct { margin-left: 15px; font-variant-numeric: tabular-nums; }
+	/* kept for now: the port's progress bar along the bottom edge, the newest log line centred above it and the data downloaded above that */
+	#ls-log { position: absolute; left: 8px; right: 8px; bottom: 6px; display: flex; flex-direction: column; align-items: center; font: 10px/1.35 Consolas, monospace; color: rgba(190, 190, 190, .75); text-shadow: 0 0 2px #000, 1px 1px 1px #000; white-space: pre; pointer-events: none; }
+	#console { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+	#data { color: #6a9; }
+	#bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .08); }
+	#fill { height: 100%; width: 0; background: #7cc576; }
+	#hud { position: fixed; left: 8px; bottom: 8px; max-width: 60vw; white-space: pre-wrap; opacity: .8; pointer-events: none; }
+	#fps { position: fixed; left: 8px; top: 6px; display: none; color: #0f0; font: bold 18px/1.2 Consolas, monospace; font-variant-numeric: tabular-nums; text-shadow: 1px 1px 2px #000, 0 0 3px #000; pointer-events: none; z-index: 10; }
